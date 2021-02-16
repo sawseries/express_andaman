@@ -6,7 +6,7 @@ node_modules
 yarn-error.log
 
 # Environment varibales
-.env*
+.env
 .env.production
 
 *.log
