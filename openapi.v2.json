@@ -1,0 +1,3946 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "SYS API Document",
+    "version": "1.0",
+    "description": "SYS API Document"
+  },
+  "host": "localhost:3000",
+  "schemes": ["http", "https"],
+  "produces": ["application/json"],
+  "consumes": ["application/json"],
+  "paths": {
+    "/users/{userId}": {
+      "parameters": [
+        {
+          "type": "integer",
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "description": "Id of an existing user."
+        }
+      ],
+      "patch": {
+        "summary": "Update User Information",
+        "operationId": "patch-users-userId",
+        "responses": {
+          "200": {
+            "description": "User Updated",
+            "schema": {
+              "$ref": "#/definitions/User"
+            },
+            "examples": {
+              "Update User Rebecca Baker": {
+                "id": 13,
+                "firstName": "Rebecca",
+                "lastName": "Baker",
+                "email": "rebecca@gmail.com",
+                "dateOfBirth": "1985-10-02",
+                "emailVerified": false,
+                "createDate": "2019-08-24"
+              }
+            }
+          },
+          "404": {
+            "description": "User Not Found",
+            "schema": {
+              "type": "null"
+            }
+          },
+          "409": {
+            "description": "Email Already Taken",
+            "schema": {
+              "type": "null"
+            }
+          }
+        },
+        "description": "Update the infromation of an existing user.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "firstName": {
+                  "type": "string"
+                },
+                "lastName": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "If a new email is given, the user's email verified property will be set to false."
+                },
+                "dateOfBirth": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Patch user properties to update.",
+            "x-examples": {
+              "Update First Name": {
+                "firstName": "Rebecca"
+              },
+              "Update Email": {
+                "email": "rebecca@gmail.com"
+              },
+              "Update Last Name & Date of Birth": {
+                "lastName": "Baker",
+                "dateOfBirth": "1985-10-02"
+              }
+            }
+          }
+        ],
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/user": {
+      "post": {
+        "summary": "Create New User",
+        "operationId": "post-user",
+        "responses": {
+          "200": {
+            "description": "User Created",
+            "schema": {
+              "$ref": "#/definitions/User"
+            },
+            "examples": {
+              "example-1": {
+                "id": 0,
+                "firstName": "string",
+                "lastName": "string",
+                "email": "user@example.com",
+                "dateOfBirth": "1997-10-31",
+                "emailVerified": true,
+                "createDate": "2019-08-24"
+              }
+            }
+          },
+          "400": {
+            "description": "Missing Required Information",
+            "schema": {
+              "type": "null"
+            }
+          },
+          "409": {
+            "description": "Email Already Taken",
+            "schema": {
+              "type": "null"
+            }
+          }
+        },
+        "description": "Create a new user.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "firstName": {
+                  "type": "string"
+                },
+                "lastName": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "dateOfBirth": {
+                  "type": "string",
+                  "format": "date"
+                }
+              },
+              "required": ["firstName", "lastName", "email", "dateOfBirth"]
+            },
+            "description": "Post the necessary fields for the API to create a new user.",
+            "x-examples": {
+              "Create User Bob Fellow": {
+                "firstName": "Bob",
+                "lastName": "Fellow",
+                "email": "bob.fellow@gmail.com",
+                "dateOfBirth": "1996-08-24"
+              },
+              "example-2": {
+                "firstName": "string",
+                "lastName": "string",
+                "email": "string",
+                "dateOfBirth": "2019-08-24"
+              }
+            }
+          }
+        ],
+        "tags": ["User"]
+      }
+    },
+    "/trd/retail-store-list": {
+      "get": {
+        "summary": "GET Retail Store",
+        "tags": ["Trd"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/TrdRetailList"
+            }
+          }
+        },
+        "operationId": "get-trd-retail-select-list",
+        "description": "ร้านค้าย่อย (Modal)",
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "/trd/add-retail": {
+      "post": {
+        "summary": "Create New Retail",
+        "operationId": "post-trd-add-retail",
+        "tags": ["Trd"],
+        "description": "เพิ่มรายชื่อร้านค้า",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ret_id": {
+                  "type": "integer",
+                  "description": "ไอดีร้านค้าย่อย"
+                },
+                "trd_id": {
+                  "type": "integer",
+                  "description": "ไอดีผู้ขายเศษเหล็ก"
+                }
+              },
+              "required": ["ret_id", "trd_id"]
+            }
+          }
+        ],
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Successfully"
+          }
+        }
+      }
+    },
+    "/trd/confirm": {
+      "post": {
+        "summary": "POST Confirm Retail",
+        "operationId": "post-trd-confirm",
+        "description": "ยืนยันร้านค้า",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "trd_id": {
+                  "type": "integer",
+                  "description": "ไอดีผู้ขายเศษเหล็ก"
+                },
+                "ret_id": {
+                  "type": "integer",
+                  "description": "ไอดีร้านค้า"
+                }
+              },
+              "required": ["trd_id", "ret_id"]
+            }
+          }
+        ],
+        "tags": ["Trd"],
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Successfully"
+          }
+        }
+      }
+    },
+    "/trd/del-retail": {
+      "delete": {
+        "parameters": [
+          {
+            "type": "integer",
+            "in": "query",
+            "name": "trd_id",
+            "description": "ไอดีผู้ขาย",
+            "required": true
+          },
+          {
+            "type": "string",
+            "in": "query",
+            "name": "trd_confirm_id",
+            "required": true,
+            "description": "ไอดียืนยันร้านค้า"
+          }
+        ],
+        "description": "ลบรายการร้านค้า",
+        "summary": "Delete Retail",
+        "tags": ["Trd"],
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Deleted"
+          }
+        }
+      },
+      "parameters": []
+    },
+    "/trd/update-retail": {
+      "post": {
+        "summary": "Update Retail",
+        "operationId": "post-trd-update-retail",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Successfully"
+          }
+        },
+        "description": "แก้ไขรายการร้านค้า",
+        "tags": ["Trd"],
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/trd/profile": {
+      "get": {
+        "summary": "GET Trd Profile",
+        "tags": ["Trd"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Trd"
+            },
+            "examples": {
+              "example-1": {
+                "trd_id": "1",
+                "trd_code": "trd001",
+                "trd_title": "บจก.",
+                "trd_name": "พิรุณสร้าง",
+                "trd_adr1": "21/12 ซ.xxxx ",
+                "trd_adr2": "ต.xxxx อ.xxxxx",
+                "trdsap_code": "",
+                "prov_code": "1000",
+                "zip_code": "100000",
+                "cn_p1": "บรรจง สมคิด",
+                "cn_p1_tel": "081 3300022",
+                "cn_p2": "",
+                "cn_p2_tel": "",
+                "cn_p3": "",
+                "cn_p3_tel": "",
+                "fax1": "",
+                "fax2": "",
+                "trd_email": "",
+                "trd_profile": "",
+                "trd_status_id": "1",
+                "user_id": "",
+                "created_by": "1",
+                "created_at": "27/1/2021 21:32:48",
+                "updated_by": "",
+                "updated_at": ""
+              }
+            }
+          }
+        },
+        "operationId": "get-trd-profile",
+        "description": "ข้อมูลผู้ขายเศษเหล็ก",
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/trd/profile/{trd_id}": {
+      "parameters": [
+        {
+          "type": "integer",
+          "name": "trd_id",
+          "in": "path",
+          "required": true,
+          "description": "ไอดีผู้ขายเศษเหล็ก"
+        }
+      ],
+      "get": {
+        "summary": "GET Trd Profile By Id",
+        "tags": ["Trd"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Trd"
+            }
+          }
+        },
+        "operationId": "get-trd-profile-trd_id",
+        "description": "ข้อมูลผู้ขายเศษเหล็ก",
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/retail/profile": {
+      "get": {
+        "summary": "GET Retail Profile",
+        "tags": ["Retail"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Ret"
+            },
+            "examples": {
+              "example-1": {
+                "ret_id": 1,
+                "ret_code": "ret001",
+                "ret_title": "ร้าน",
+                "ret_name": "ยิ่งเจริญ ทดสอบ",
+                "ret_adr1": "22 ซ.จินตนา",
+                "ret_adr2": "ต.ทดสอบ อ.ทดสอบ",
+                "zip_code": "10000",
+                "prov_code": "1000",
+                "con_p": "",
+                "con_tel": "",
+                "fax1": "",
+                "ret_email": "",
+                "ret_lon": "16.440802775622874",
+                "ret_lat": "102.76661316261094",
+                "ret_profile": "",
+                "ret_status_id": 1,
+                "ret_confirm": "",
+                "user_id": 3,
+                "created_by": 2,
+                "created_at": "2020-01-01 20:00:00",
+                "updated_by": 2,
+                "updated_at": "2020-01-01 20:00:00"
+              }
+            }
+          }
+        },
+        "operationId": "get-retail-profile",
+        "description": "ข้อมูลร้านค้าย่อย",
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/retail/profile/{ret_id}": {
+      "parameters": [
+        {
+          "type": "string",
+          "name": "ret_id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "GET Retail Profile By Id",
+        "tags": ["Retail"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Ret"
+            },
+            "examples": {
+              "example-1": {
+                "ret_id": 1,
+                "ret_code": "ret001",
+                "ret_title": "ร้าน",
+                "ret_name": "ยิ่งเจริญ ทดสอบ",
+                "ret_adr1": "22 ซ.จินตนา",
+                "ret_adr2": "ต.ทดสอบ อ.ทดสอบ",
+                "zip_code": "10000",
+                "prov_code": "1000",
+                "con_p": "",
+                "con_tel": "",
+                "fax1": "",
+                "ret_email": "",
+                "ret_lon": "16.440802775622874",
+                "ret_lat": "102.76661316261094",
+                "ret_profile": "",
+                "ret_status_id": 1,
+                "ret_confirm": "",
+                "user_id": 3,
+                "created_by": 2,
+                "created_at": "2020-01-01 20:00:00",
+                "updated_by": 2,
+                "updated_at": "2020-01-01 20:00:00"
+              }
+            }
+          }
+        },
+        "operationId": "get-retail-profile-ret_id",
+        "description": "ข้อมูลร้านค้าย่อย",
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/pl/create": {
+      "post": {
+        "summary": "Create New PL",
+        "operationId": "post-pl-create",
+        "responses": {
+          "201": {
+            "$ref": "#/responses/Successfully"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "description": "สร้างรายการใบนำส่ง",
+        "tags": ["PL"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "doc_type": {
+                  "type": "integer",
+                  "description": "ประเภทการส่ง 1=ส่งปกติ/2=walk in",
+                  "default": 1,
+                  "format": "int32"
+                },
+                "truck_type_id": {
+                  "type": "integer",
+                  "description": "ประเภทรถยนต์"
+                },
+                "wh_number": {
+                  "type": "number",
+                  "description": "โกดัง",
+                  "default": 1
+                },
+                "pl_bulk": {
+                  "type": "integer",
+                  "description": "เศษเหล็กเหมากอง (0 or 1)"
+                },
+                "pl_contact": {
+                  "type": "integer",
+                  "description": "ส่งตามสัญญา (0 or 1)"
+                },
+                "contract_no": {
+                  "type": "string",
+                  "description": "เลขที่สัญญา"
+                },
+                "com_grade_code": {
+                  "type": "string",
+                  "description": "เกรดเศษเหล็ก"
+                }
+              },
+              "required": ["doc_type", "truck_type_id", "wh_number", "contract_no", "com_grade_code"]
+            },
+            "description": "รายละเอียด"
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "/pl/update": {
+      "post": {
+        "summary": "Update PL",
+        "operationId": "post-pl-update",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Successfully"
+          },
+          "": {
+            "$ref": "#/responses/Successfully"
+          }
+        },
+        "description": "แก้ไขรายการใบนำส่ง",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "in": "query",
+            "name": "pl_id",
+            "description": "ไอดี",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/PL"
+            },
+            "description": "รายละเอียด"
+          }
+        ],
+        "tags": ["PL"]
+      },
+      "parameters": []
+    },
+    "/pl/del": {
+      "delete": {
+        "summary": "Delete PL",
+        "operationId": "delete-del",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Deleted"
+          },
+          "": {
+            "$ref": "#/responses/Deleted"
+          }
+        },
+        "description": "ลบรายการ",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "in": "query",
+            "name": "pl_id",
+            "required": true,
+            "description": "ไอดี"
+          },
+          {
+            "type": "string",
+            "in": "query",
+            "name": "ret_id",
+            "description": "ไอดีร้านค้า",
+            "required": true
+          }
+        ],
+        "tags": ["PL"]
+      },
+      "parameters": []
+    },
+    "/delivery/update": {
+      "post": {
+        "summary": "POST Update",
+        "operationId": "post-delivery-update",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "description": "ปรับเปลี่ยนการจัดส่ง",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "tags": ["Delivery"]
+      }
+    },
+    "/delivery/call": {
+      "post": {
+        "summary": "POST Call Queue",
+        "operationId": "post-delivery-call",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": ["Delivery"],
+        "description": "เรียกคิว",
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/queuing/call": {
+      "parameters": [],
+      "post": {
+        "summary": "POST Call",
+        "operationId": "post-queuing-call",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Successfully"
+          }
+        },
+        "description": "เรียกคิว",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "tags": ["Queuing"]
+      }
+    },
+    "/pl/shipping-list": {
+      "get": {
+        "summary": "GET Shipping List",
+        "tags": ["PL"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PLShippingList"
+              }
+            }
+          }
+        },
+        "operationId": "get-pl-shipping-list",
+        "description": "รายการกำลังจัดส่ง",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "in": "query",
+            "name": "trd_id",
+            "description": "ไอดีผู้ขายเศษเหล็ก"
+          },
+          {
+            "type": "integer",
+            "in": "query",
+            "name": "ret_id",
+            "description": "ไอดีร้านค้า"
+          },
+          {
+            "type": "integer",
+            "in": "query",
+            "name": "shipment_status_id",
+            "description": "ไอดีสถานะการจัดส่ง"
+          },
+          {
+            "type": "string",
+            "in": "query",
+            "name": "plant_code",
+            "description": "รหัสโรงงาน"
+          }
+        ]
+      }
+    },
+    "/pl/history-list": {
+      "get": {
+        "summary": "GET History List",
+        "tags": ["PL"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PLHistoryList"
+              }
+            }
+          }
+        },
+        "operationId": "get-pl-history-list",
+        "description": "ประวัติใบนำส่ง",
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/retail/store-list": {
+      "get": {
+        "summary": "GET Retail List",
+        "tags": ["Retail"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "description": "",
+              "type": "object",
+              "properties": {
+                "total": {
+                  "type": "number"
+                },
+                "perPage": {
+                  "type": "number"
+                },
+                "offset": {
+                  "type": "number"
+                },
+                "to": {
+                  "type": "number"
+                },
+                "lastPage": {
+                  "type": "number"
+                },
+                "currentPage": {
+                  "type": "number"
+                },
+                "pageCount": {
+                  "type": "number"
+                },
+                "from": {
+                  "type": "number"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/RetailList"
+                  }
+                }
+              },
+              "required": ["total", "perPage", "offset", "to", "lastPage", "currentPage", "pageCount", "from", "data"]
+            },
+            "examples": {
+              "example-1": {
+                "total": 1,
+                "perPage": 10,
+                "offset": 0,
+                "to": 1,
+                "lastPage": 1,
+                "currentPage": 1,
+                "pageCount": 1,
+                "from": 0,
+                "data": [
+                  {
+                    "ret_id": 1,
+                    "ret_code": "ret001",
+                    "ret_title": "ร้าน",
+                    "ret_name": "ยิ่งเจริญ ทดสอบ",
+                    "retail_name": "ร้าน ยิ่งเจริญ ทดสอบ",
+                    "con_p": null,
+                    "con_tel": null,
+                    "ret_confirm": null,
+                    "ret_status_id": 1,
+                    "ret_status_des": "Active",
+                    "trd_id": 1,
+                    "user_id": null,
+                    "trd_code": "trd001"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "operationId": "get-retail-list",
+        "description": "รายชื่อร้านค้า",
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "/retail/create": {
+      "post": {
+        "summary": "POST Create",
+        "operationId": "post-retail-create",
+        "responses": {
+          "201": {
+            "$ref": "#/responses/Successfully"
+          }
+        },
+        "description": "สร้างรายการร้านค้า",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/Ret"
+            },
+            "description": "รายละเอียด"
+          }
+        ],
+        "tags": ["Retail"]
+      }
+    },
+    "/trd/create": {
+      "post": {
+        "summary": "POST Create New Trd",
+        "operationId": "post-trd-create",
+        "responses": {
+          "201": {
+            "$ref": "#/responses/Successfully"
+          }
+        },
+        "description": "สร้างรายการผู้ขาย",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/Trd"
+            }
+          }
+        ],
+        "tags": ["Trd"]
+      }
+    },
+    "/trd/update": {
+      "post": {
+        "summary": "POST Update Trd",
+        "operationId": "post-trd-update",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Successfully"
+          }
+        },
+        "tags": ["Trd"],
+        "description": "แก้ไขรายการ",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/Trd"
+            },
+            "description": ""
+          },
+          {
+            "type": "integer",
+            "in": "query",
+            "name": "trd_id",
+            "description": "ไอดี",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/trd/del": {
+      "delete": {
+        "summary": "DELETE Trd",
+        "operationId": "delete-trd-del",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Deleted"
+          }
+        },
+        "tags": ["Trd"],
+        "description": "ลบรายการ",
+        "parameters": [
+          {
+            "type": "integer",
+            "in": "query",
+            "name": "trd_id",
+            "description": "ไอดีผู้ขาย",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/retail/update/{id}": {
+      "post": {
+        "summary": "POST Update Retail",
+        "operationId": "post-retail-update",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Successfully"
+          }
+        },
+        "tags": ["Retail"],
+        "description": "แก้ไขรายการร้านค้า",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/Ret"
+            },
+            "description": "รายละเอียด"
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "type": "integer",
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ไอดี"
+        }
+      ]
+    },
+    "/retail/del/{id}": {
+      "delete": {
+        "summary": "DELETE Retail",
+        "operationId": "delete-retail-del",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Deleted"
+          }
+        },
+        "description": "ลบรายการร้านค้า",
+        "tags": ["Retail"],
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "parameters": []
+      },
+      "parameters": [
+        {
+          "type": "integer",
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ไอดี"
+        }
+      ]
+    },
+    "/driver/list": {
+      "get": {
+        "summary": "GET Driver List",
+        "tags": ["Driver"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Driver"
+              }
+            }
+          }
+        },
+        "operationId": "get-driver-list",
+        "description": "รายการพนักงานขับรถยนต์",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "parameters": []
+      }
+    },
+    "/driver/create": {
+      "post": {
+        "summary": "POST Create New Driver",
+        "operationId": "post-driver-create",
+        "responses": {
+          "201": {
+            "$ref": "#/responses/Successfully"
+          }
+        },
+        "tags": ["Driver"],
+        "description": "สร้างรายการพนักงานขับรถยนต์",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/Driver"
+            },
+            "description": "รายละเอียด"
+          }
+        ]
+      }
+    },
+    "/driver/update": {
+      "post": {
+        "summary": "POST Update Driver",
+        "operationId": "post-driver-update",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Successfully"
+          }
+        },
+        "tags": ["Driver"],
+        "description": "แก้ไขรายการพนักงานขับรถยนต์",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/Driver"
+            },
+            "description": "รายละเอียด"
+          },
+          {
+            "type": "integer",
+            "in": "query",
+            "name": "driver_id",
+            "description": "ไอดี",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/driver/del": {
+      "delete": {
+        "summary": "DELETE Driver",
+        "operationId": "delete-driver-del",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Deleted"
+          }
+        },
+        "tags": ["Driver"],
+        "description": "ลบรายการพนักงานขับรถยนต์",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "in": "query",
+            "name": "driver_id",
+            "description": "ไอดี",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/truck/list": {
+      "get": {
+        "summary": "GET Truck List",
+        "tags": ["Truck"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Truck"
+              }
+            }
+          }
+        },
+        "operationId": "get-truck-list",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "description": "รายการรถยนต์"
+      }
+    },
+    "/truck/create": {
+      "post": {
+        "summary": "POST Create New Truck",
+        "operationId": "post-truck-create",
+        "responses": {
+          "201": {
+            "$ref": "#/responses/Successfully"
+          }
+        },
+        "tags": ["Truck"],
+        "description": "บันทึกรายการรถยนต์",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/Truck"
+            },
+            "description": "รายละเอียดรถยนต์"
+          }
+        ]
+      }
+    },
+    "/truck/update": {
+      "post": {
+        "summary": "POST Update Truck",
+        "operationId": "post-truck-update",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Successfully"
+          }
+        },
+        "tags": ["Truck"],
+        "description": "แก้ไขรายการรถยนต์",
+        "parameters": [
+          {
+            "type": "integer",
+            "in": "query",
+            "name": "truck_id",
+            "description": "ไอดี",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/Truck"
+            },
+            "description": "รายละเอียด"
+          }
+        ],
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/truck/del": {
+      "delete": {
+        "summary": "DELETE Truck",
+        "operationId": "delete-truck-del",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Deleted"
+          }
+        },
+        "description": "ลบรายการรถยนต์",
+        "tags": ["Truck"],
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "in": "query",
+            "name": "truck_id",
+            "description": "ไอดี",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/truck/confirm": {
+      "post": {
+        "summary": "POST Confirm Truck",
+        "operationId": "post-truck-confirm",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Successfully"
+          }
+        },
+        "tags": ["Truck"],
+        "description": "ยืนยันรายการ",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "truck_id": {
+                  "type": "integer",
+                  "description": "ไอดี"
+                }
+              },
+              "required": ["truck_id"]
+            },
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/truck/type-list": {
+      "get": {
+        "summary": "GET Truck Type List",
+        "tags": ["Truck"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TruckType"
+              }
+            }
+          }
+        },
+        "operationId": "get-truck-type-list",
+        "description": "รายชื่อประเภทรถยนต์",
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/user/login": {
+      "post": {
+        "summary": "POST Login",
+        "operationId": "post-user-login",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/Login"
+          }
+        },
+        "tags": ["User"],
+        "description": "เข้าสู่ระบบ",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "description": "ชื่อผู้ใช้งาน",
+                  "minLength": 3
+                },
+                "password": {
+                  "type": "string",
+                  "description": "รหัสผ่าน",
+                  "minLength": 8
+                }
+              },
+              "required": ["username", "password"]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "title": "User",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Unique identifier for the given user."
+        },
+        "username": {
+          "type": "string",
+          "description": "ชื่อผู้ใช้งาน"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "อีเมล"
+        },
+        "password_hash": {
+          "type": "string",
+          "format": "password",
+          "description": "รหัสผ่าน"
+        },
+        "auth_key": {
+          "type": "string"
+        },
+        "confirmed_at": {
+          "type": "integer",
+          "description": "Set to true if the user's email has been verified."
+        },
+        "unconfirmed_email": {
+          "type": "string",
+          "format": "email",
+          "description": "อีเมล"
+        },
+        "blocked_at": {
+          "type": "integer",
+          "description": "สถานะการบล็อก"
+        },
+        "registration_ip": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "ไอพีที่ลงทะเบียน"
+        },
+        "created_at": {
+          "type": "integer",
+          "description": "วันที่สร้าง"
+        },
+        "updated_at": {
+          "type": "integer",
+          "description": "วันที่แก้ไข"
+        },
+        "flags": {
+          "type": "integer"
+        },
+        "last_login_at": {
+          "type": "integer",
+          "description": "วัน,เวลาที่เข้าสู่ระบบล่าสุด"
+        },
+        "clients": {
+          "type": "string"
+        },
+        "token_expire": {
+          "type": "string"
+        },
+        "access_token": {
+          "type": "string"
+        },
+        "user_type_id": {
+          "type": "integer"
+        }
+      },
+      "required": ["id", "username", "email", "password_hash", "auth_key", "created_at", "updated_at", "user_type_id"],
+      "description": "ผู้ใช้งาน"
+    },
+    "Trd": {
+      "title": "Trd",
+      "type": "object",
+      "description": "ผู้ขาย",
+      "x-tags": ["Trd"],
+      "properties": {
+        "trd_id": {
+          "type": "integer",
+          "description": "autoid"
+        },
+        "trd_code": {
+          "type": "string",
+          "description": "รหัสผู้ขายเศษเหล็ก",
+          "maxLength": 10,
+          "minLength": 0
+        },
+        "trd_title": {
+          "type": "string",
+          "description": "ชื่อต้น",
+          "maxLength": 10,
+          "minLength": 0
+        },
+        "trd_name": {
+          "type": "string",
+          "description": "ชื่อผู้ขายเศษเหล็ก"
+        },
+        "trd_adr1": {
+          "type": "string",
+          "description": "ที่อยู่ 1"
+        },
+        "trd_adr2": {
+          "type": "string",
+          "description": "ที่อยู่ 2"
+        },
+        "trdsap_code": {
+          "type": "string"
+        },
+        "prov_id": {
+          "type": "integer",
+          "description": "รหัสจังหวัด"
+        },
+        "zip_code": {
+          "type": "string",
+          "description": "รหัสไปรษณีย์"
+        },
+        "cn_p1": {
+          "type": "string",
+          "description": "ชื่อผู้ติดต่อ 1"
+        },
+        "cn_p1_tel": {
+          "type": "string",
+          "description": "เบอร์โทรผู้ติดต่อ1"
+        },
+        "cn_p2": {
+          "type": "string",
+          "description": "ชื่อผู้ติดต่อ2"
+        },
+        "cn_p2_tel": {
+          "type": "string",
+          "description": "เบอร์โทรผู้ติดต่อ2"
+        },
+        "cn_p3": {
+          "type": "string",
+          "description": "ชื่อผู้ติดต่อ3"
+        },
+        "cn_p3_tel": {
+          "type": "string",
+          "description": "เบอร์โทรผู้ติดต่อ3"
+        },
+        "fax1": {
+          "type": "string",
+          "description": "Fax 1"
+        },
+        "fax2": {
+          "type": "string",
+          "description": "Fax 2"
+        },
+        "trd_email": {
+          "type": "string",
+          "description": "อีเมล"
+        },
+        "trd_profile": {
+          "type": "string"
+        },
+        "trd_status_id": {
+          "type": "integer",
+          "description": "สถานะ 1 active 2 deactive"
+        },
+        "user_id": {
+          "type": "integer",
+          "description": "ไอดีผู้ใช้งาน"
+        },
+        "created_by": {
+          "type": "integer",
+          "description": "ผู้สร้างรายการ"
+        },
+        "created_at": {
+          "type": "string",
+          "description": "วัน,เวลาที่สร้าง",
+          "format": "date-time",
+          "example": "2020-01-01 20:00:00"
+        },
+        "updated_by": {
+          "type": "integer",
+          "description": "ผู้แก้ไข"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-01-01 20:00:00",
+          "description": "วัน,เวลาที่แก้ไข"
+        }
+      },
+      "required": ["trd_code", "trd_title", "trd_name", "created_by", "created_at", "updated_by", "updated_at"]
+    },
+    "Company": {
+      "title": "Company",
+      "type": "object",
+      "description": "ข้อมูลบริษัท",
+      "x-examples": {
+        "example-1": {
+          "com_id": 1,
+          "com_name": "บริษัท เหล็กสยามยามาโตะ จำกัด",
+          "com_address": "1 ซอย ปูนซีเมนต์ไทย แขวง บางซื่อ เขตบางซื่อ กรุงเทพมหานคร ",
+          "zip_code": "10800",
+          "prov_code": "123456",
+          "com_phone": "02 586 7777",
+          "com_email": "email ทดสอบ",
+          "sys1_name": "บริษัท เหล็กสยามยามาโตะ จำกัด 1",
+          "sys1_phone": "+6638698500",
+          "sys1_callcentre": "+6638698500",
+          "sys1_lon": "12.707983466828827",
+          "sys1_lat": "101.11220518880515",
+          "sys2_name": "บริษัท เหล็กสยามยามาโตะ จำกัด 2",
+          "sys2_phone": "+6638683723",
+          "sys2_callcentre": "+6638683723",
+          "sys2_lon": "12.676499725810988",
+          "sys2_lat": "101.14705244824391",
+          "created_at": "2020-01-01 20:00:00",
+          "created_by": 1,
+          "updated_at": "2020-01-01 20:00:00",
+          "updated_by": 1
+        }
+      },
+      "properties": {
+        "com_id": {
+          "type": "integer"
+        },
+        "com_name": {
+          "type": "string",
+          "description": "ชื่อบริษัท"
+        },
+        "com_address": {
+          "type": "string",
+          "description": "ที่อยู่"
+        },
+        "zip_code": {
+          "type": "string",
+          "description": "รหัสไปรษณีย์"
+        },
+        "prov_id": {
+          "type": "integer",
+          "description": "รหัสจังหวัด"
+        },
+        "com_phone": {
+          "type": "string",
+          "description": "เบอร์โทรศัพท์"
+        },
+        "com_email": {
+          "type": "string",
+          "description": "อีเมล"
+        },
+        "sys1_name": {
+          "type": "string",
+          "description": "ชื่อโรงงาน sys1"
+        },
+        "sys1_phone": {
+          "type": "string",
+          "description": "เบอร์โทรศัพท์"
+        },
+        "sys1_callcentre": {
+          "type": "string",
+          "description": "เบอร์โทรศัพท์ รปภ.sys1"
+        },
+        "sys1_lon": {
+          "type": "string",
+          "description": "longitude"
+        },
+        "sys1_lat": {
+          "type": "string",
+          "description": "latitude"
+        },
+        "sys2_name": {
+          "type": "string",
+          "description": "ชื่อโรงงาน sys2"
+        },
+        "sys2_phone": {
+          "type": "string",
+          "description": "เบอร์โทรศัพท์"
+        },
+        "sys2_callcentre": {
+          "type": "string",
+          "description": "เบอร์โทรศัพท์ รปภ.sys"
+        },
+        "sys2_lon": {
+          "type": "string",
+          "description": "longitude"
+        },
+        "sys2_lat": {
+          "type": "string",
+          "description": "latitude"
+        },
+        "created_at": {
+          "type": "string",
+          "description": "วัน,เวลา ที่สร้าง",
+          "format": "date-time",
+          "example": "2020-01-01 20:00:00"
+        },
+        "created_by": {
+          "type": "integer",
+          "description": "ผู้บันทึก"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-01-01 20:00:00",
+          "description": "วัน,เวลา ที่แก้ไข"
+        },
+        "updated_by": {
+          "type": "integer",
+          "description": "ผู้แก้ไข"
+        }
+      }
+    },
+    "Driver": {
+      "title": "Driver",
+      "type": "object",
+      "description": "พนักงานขับรถ",
+      "x-examples": {
+        "example-1": {
+          "driver_id": 7,
+          "driver_title": "นาย",
+          "driver_name": "ธนวัต",
+          "driver_surname": "โอลาพฤกษ์",
+          "user_id": 2,
+          "driver_cid": 1234567890123,
+          "driver_license": "6015107001052",
+          "driver_phone": "0812345678",
+          "driver_email": "",
+          "blacklist_status": "",
+          "owner_type": "1",
+          "ret_code": "ret001",
+          "driver_pic": "",
+          "confirm_status": "N",
+          "AutoID": "",
+          "driver_status_id": 1,
+          "created_by": 1,
+          "created_at": "2020-01-01 20:00:00",
+          "updated_by": 1,
+          "updated_at": "2020-01-01 20:00:00"
+        }
+      },
+      "properties": {
+        "driver_id": {
+          "type": "integer",
+          "description": "ชื่อต้น"
+        },
+        "driver_title": {
+          "type": "string",
+          "description": "ชื่อต้น"
+        },
+        "driver_name": {
+          "type": "string",
+          "description": "ชื่อ"
+        },
+        "driver_surname": {
+          "type": "string",
+          "description": "นามสกุล"
+        },
+        "user_id": {
+          "type": "integer",
+          "description": "รหัสผู้ใช้งาน"
+        },
+        "driver_cid": {
+          "type": "number",
+          "description": "เลขที่บัตรประชาชน"
+        },
+        "driver_license": {
+          "type": "string",
+          "description": "เลขที่ใบอนุญาติขับรถยนต์"
+        },
+        "driver_phone": {
+          "type": "string",
+          "description": "เบอร์โทรติดต่อ"
+        },
+        "driver_email": {
+          "type": "string",
+          "description": "อีเมล"
+        },
+        "blacklist_status": {
+          "type": "string",
+          "description": "Y=black list  N=Active"
+        },
+        "owner_type_id": {
+          "type": "integer",
+          "description": "ประเภทพนักงานรถ 1=พนักงานร้านค้า 2 = พนักงานรับจ้าง"
+        },
+        "ret_id": {
+          "type": "integer",
+          "description": "รหัสร้านค้า"
+        },
+        "driver_pic_path": {
+          "type": "string"
+        },
+        "driver_pic_base_url": {
+          "type": "string"
+        },
+        "confirm_status": {
+          "type": "string",
+          "description": "ยืนยัน Y or N"
+        },
+        "AutoID": {
+          "type": "integer"
+        },
+        "driver_status_id": {
+          "type": "integer",
+          "description": "สถานะ 1 active 2 deactive"
+        },
+        "created_by": {
+          "type": "integer",
+          "description": "ผู้สร้าง"
+        },
+        "created_at": {
+          "type": "string",
+          "description": "วัน,เวลาที่สร้าง",
+          "format": "date-time",
+          "example": "2020-01-01 20:00:00"
+        },
+        "updated_at": {
+          "type": "string",
+          "description": "วัน,เวลาที่แก้ไข",
+          "format": "date-time",
+          "example": "2020-02-01 20:00:00"
+        },
+        "updated_by": {
+          "type": "integer",
+          "description": "ผู้แก้ไข"
+        },
+        "driver_cid_pic_path": {
+          "type": "string"
+        },
+        "driver_cid_pic_base_url": {
+          "type": "string"
+        },
+        "driver_license_pic_path": {
+          "type": "string"
+        },
+        "driver_license_base_url": {
+          "type": "string"
+        }
+      },
+      "required": ["driver_id", "driver_title", "driver_name", "driver_surname"]
+    },
+    "Grade": {
+      "title": "Grade",
+      "type": "object",
+      "properties": {
+        "com_grade_code": {
+          "type": "string",
+          "description": "รหัสเกรด"
+        },
+        "com_grade_name": {
+          "type": "string",
+          "description": "ชื่อเกรด"
+        }
+      },
+      "required": ["com_grade_code", "com_grade_name"]
+    },
+    "Holiday": {
+      "title": "Holiday",
+      "type": "object",
+      "description": "วันหยุด",
+      "properties": {
+        "holiday_id": {
+          "type": "integer"
+        },
+        "holiday_date": {
+          "type": "string",
+          "description": "วันที่",
+          "format": "date",
+          "example": "2020-01-01"
+        },
+        "holiday_name": {
+          "type": "string",
+          "description": "ชื่อวันหยุด"
+        },
+        "created_by": {
+          "type": "integer",
+          "description": "ผู้สร้าง"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-01-01 20:00:00",
+          "description": "วัน,เวลาที่สร้าง"
+        },
+        "updated_by": {
+          "type": "integer",
+          "description": "ผู้แก้ไข"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-01-01 20:00:00",
+          "description": "วัน,เวลาที่แก้ไข"
+        }
+      },
+      "required": ["holiday_date", "holiday_name", "created_by", "created_at", "updated_by", "updated_at"]
+    },
+    "PDPA": {
+      "title": "PDPA",
+      "type": "object",
+      "x-examples": {
+        "example-1": {
+          "pdpa_id": 1,
+          "pdpa_date": "2020-01-01",
+          "pdpa_type": 1,
+          "pdpa_detail": "ทดสอบ",
+          "pdpa_status": 1,
+          "created_by": 1,
+          "created_at": "2020-01-01 20:00:00",
+          "updated_by": 1,
+          "updated_at": "2020-01-01 20:00:00"
+        }
+      },
+      "properties": {
+        "pdpa_id": {
+          "type": "integer",
+          "description": "รหัส pdpa"
+        },
+        "pdpa_date": {
+          "type": "string",
+          "format": "date",
+          "example": "2020-01-01",
+          "description": "วันที่"
+        },
+        "pdpa_type_id": {
+          "type": "integer",
+          "description": "1=ร้านค้าย่อย/2=พนักงานขับรถยนต์"
+        },
+        "pdpa_detail": {
+          "type": "string",
+          "description": "รายละเอียด pdpa"
+        },
+        "pdpa_status": {
+          "type": "integer",
+          "description": "สถานะ 1=Active/2=Deactive"
+        },
+        "created_by": {
+          "type": "integer",
+          "description": "ผู้สร้าง"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-01-01 20:00:00",
+          "description": "วัน,เวลาที่สร้าง"
+        },
+        "updated_by": {
+          "type": "integer",
+          "description": "ผู้แก้ไข"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-01-01 20:00:00",
+          "description": "วัน,เวลาที่แก้ไข"
+        }
+      },
+      "required": ["pdpa_date", "pdpa_type_id", "pdpa_status", "created_by", "created_at", "updated_by", "updated_at"]
+    },
+    "PDPAConcent": {
+      "title": "PDPA_Concent",
+      "type": "object",
+      "properties": {
+        "pdpa_concent_id": {
+          "type": "integer"
+        },
+        "user_id": {
+          "type": "integer",
+          "description": "รหัสผู้ใช้งาน"
+        },
+        "pdpa_id": {
+          "type": "integer",
+          "description": "รหัส pdpa"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-01-01 20:20:00",
+          "description": "วัน,เวลาที่สร้าง"
+        },
+        "created_by": {
+          "type": "integer",
+          "description": "ผู้สร้าง"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-01-01 20:00:00",
+          "description": "วัน,เวลาที่แก้ไข"
+        },
+        "updated_by": {
+          "type": "integer",
+          "description": "ผู้แก้ไข"
+        }
+      },
+      "required": ["user_id", "pdpa_id", "created_at", "created_by", "updated_at", "updated_by"]
+    },
+    "PL": {
+      "title": "PL",
+      "type": "object",
+      "properties": {
+        "pl_id": {
+          "type": "integer"
+        },
+        "doc_num": {
+          "type": "integer",
+          "description": "เลขที่เอกสาร"
+        },
+        "doc_date": {
+          "type": "string",
+          "format": "date",
+          "example": "2020-01-01",
+          "description": "วันที่เอกสาร"
+        },
+        "ret_id": {
+          "type": "integer",
+          "description": "รหัสร้านค้า"
+        },
+        "trd_id": {
+          "type": "integer",
+          "description": "รหัสผู้ขายเศษเหล็ก"
+        },
+        "truck_type_id": {
+          "type": "integer",
+          "description": "ประเภทรถยนต์"
+        },
+        "wh_number": {
+          "type": "integer",
+          "description": "โกดัง defualt = 1",
+          "default": 1
+        },
+        "doc_type_id": {
+          "type": "string",
+          "description": "ประเภทการส่ง 1=ส่งปกติ/2=walk in"
+        },
+        "ship_date": {
+          "type": "string",
+          "format": "date",
+          "example": "2020-01-01",
+          "description": "วันที่ส่ง"
+        },
+        "ship_time_begin": {
+          "type": "string",
+          "format": "time",
+          "example": "20:20:00",
+          "description": "เวลาส่งเริ่ม"
+        },
+        "ship_time_end": {
+          "type": "string",
+          "description": "เวลาส่งถึง",
+          "format": "date",
+          "example": "20:20:00"
+        },
+        "plant_code": {
+          "type": "string",
+          "description": "รหัสโรงงาน"
+        },
+        "owner_type_id": {
+          "type": "integer",
+          "description": "ประเภทพนักงานรถ 1=พนักงานร้านค้า 2 = พนักงานรับจ้าง"
+        },
+        "driver_id": {
+          "type": "integer",
+          "description": "รหัสพนักงานขับรถยนต์"
+        },
+        "shipment_status_id": {
+          "type": "integer",
+          "description": "รหัสสถานะการส่ง"
+        },
+        "start_time": {
+          "type": "string",
+          "format": "time",
+          "example": "20:00:00",
+          "description": "เวลาเริ่มเดินทาง"
+        },
+        "confirm_time": {
+          "type": "string",
+          "format": "time",
+          "example": "20:00:00",
+          "description": "เวลายืนยัน"
+        },
+        "checkin_time": {
+          "type": "string",
+          "format": "time",
+          "example": "20:00:00",
+          "description": "เวลาเช็คอิน"
+        },
+        "doc_status": {
+          "type": "integer",
+          "description": "สถานะเอกสาร 1=Active/2=Delete"
+        },
+        "cancel_reason_id": {
+          "type": "integer",
+          "description": "รหัสการยกเลิกรายการ"
+        },
+        "change_reason_id": {
+          "type": "integer",
+          "description": "รหัสการเปลี่ยนแปลง"
+        },
+        "pl_note": {
+          "type": "string",
+          "description": "บันทึก"
+        },
+        "pl_lon": {
+          "type": "string",
+          "description": "longitude"
+        },
+        "pl_lat": {
+          "type": "string",
+          "description": "latitude"
+        },
+        "update_accept": {
+          "type": "string",
+          "description": "ต้องการยินยันการเปลี่ยนแปลง 1 = yes /2 = no"
+        },
+        "update_accept_date": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-01-01 20:00:00",
+          "description": "วันที่การยืนยันการเปลี่ยนแปลง"
+        },
+        "calling_time": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-01-01 20:00:00",
+          "description": "เวลาเรียกคิว"
+        },
+        "created_by": {
+          "type": "integer",
+          "description": "ผู้สร้าง"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-01-01 20:00:00",
+          "description": "วัน,เวลาที่สร้าง"
+        },
+        "updated_by": {
+          "type": "integer",
+          "description": "ผู้แก้ไข"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-01-01 20:00:00"
+        }
+      },
+      "required": [
+        "doc_num",
+        "doc_date",
+        "ret_id",
+        "trd_id",
+        "truck_type_id",
+        "driver_id",
+        "cancel_reason_id",
+        "change_reason_id",
+        "created_by",
+        "created_at",
+        "updated_by"
+      ]
+    },
+    "PLDetail": {
+      "title": "PL_Detail",
+      "type": "object",
+      "properties": {
+        "pl_detail_id": {
+          "type": "integer"
+        },
+        "pl_id": {
+          "type": "integer",
+          "description": "เลขที่อ้างอิง"
+        },
+        "pl_seq": {
+          "type": "integer",
+          "description": "ลำดับ"
+        },
+        "pl_bulk": {
+          "type": "string",
+          "description": "เศษเหล็กเหมากอง T / F"
+        },
+        "contract_yr": {
+          "type": "number",
+          "description": "ปีสัญญาซือขาย"
+        },
+        "contract_no": {
+          "type": "string",
+          "description": "เลขที่สัญญาซื้อขาย"
+        },
+        "com_grade_code": {
+          "type": "string",
+          "description": "รหัสเกรด"
+        },
+        "truck_id": {
+          "type": "integer",
+          "description": "รหัสรถยนต์"
+        },
+        "truckwgt": {
+          "type": "number",
+          "description": "น้ำหนักชั่งเบา",
+          "format": "float"
+        },
+        "tot_truckwgt": {
+          "type": "number",
+          "description": "น้ำหนักชั่งหนัก",
+          "format": "float"
+        },
+        "tot_actwgt": {
+          "type": "number",
+          "description": "น้ำหนักสุทธิ",
+          "format": "float"
+        },
+        "pl_contact": {
+          "type": "string",
+          "description": "ส่งตามสัญญา T / F"
+        }
+      },
+      "required": ["pl_id", "pl_seq", "pl_bulk"]
+    },
+    "Province": {
+      "title": "Province",
+      "type": "object",
+      "description": "จังหวัด",
+      "properties": {
+        "prov_id": {
+          "type": "integer"
+        },
+        "prov_code": {
+          "type": "string",
+          "description": "รหัสจังหวัด"
+        },
+        "prov_name": {
+          "type": "string",
+          "description": "ชื่อจังหวัด"
+        },
+        "zone_code": {
+          "type": "string",
+          "description": "รหัสโซน"
+        }
+      }
+    },
+    "Ret": {
+      "title": "RET",
+      "type": "object",
+      "description": "ร้านค้าย่อย",
+      "x-examples": {
+        "example-1": {
+          "ret_id": 1,
+          "ret_code": "ret001",
+          "ret_title": "ร้าน",
+          "ret_name": "ยิ่งเจริญ ทดสอบ",
+          "ret_adr1": "22 ซ.จินตนา",
+          "ret_adr2": "ต.ทดสอบ อ.ทดสอบ",
+          "zip_code": "10000",
+          "prov_code": "1000",
+          "con_p": "",
+          "con_tel": "",
+          "fax1": "",
+          "ret_email": "",
+          "ret_lon": "16.440802775622874",
+          "ret_lat": "102.76661316261094",
+          "ret_profile": "",
+          "ret_status_id": 1,
+          "ret_confirm": "",
+          "user_id": 3,
+          "created_by": 2,
+          "created_at": "2020-01-01 20:00:00",
+          "updated_by": 2,
+          "updated_at": "2020-01-01 20:00:00"
+        }
+      },
+      "properties": {
+        "ret_id": {
+          "type": "integer"
+        },
+        "ret_code": {
+          "type": "string",
+          "description": "รหัสร้านค้าย่อย"
+        },
+        "ret_title": {
+          "type": "string",
+          "description": "ชื่อต้น"
+        },
+        "ret_name": {
+          "type": "string",
+          "description": "ชื่อร้านค้าย่อย"
+        },
+        "ret_adr1": {
+          "type": "string",
+          "description": "ที่อยู่1"
+        },
+        "ret_adr2": {
+          "type": "string",
+          "description": "ที่อยู่2"
+        },
+        "zip_code": {
+          "type": "string",
+          "description": "รหัสไปรษณีย์"
+        },
+        "prov_id": {
+          "type": "integer",
+          "description": "รหัสจังหวัด"
+        },
+        "con_p": {
+          "type": "string",
+          "description": "ชื่อผู้ติดต่อ"
+        },
+        "con_tel": {
+          "type": "string",
+          "description": "เบอร์โทรศัพท์"
+        },
+        "fax1": {
+          "type": "string",
+          "description": "Fax"
+        },
+        "ret_email": {
+          "type": "string",
+          "description": "อีเมล"
+        },
+        "ret_lon": {
+          "type": "string",
+          "description": "longitude"
+        },
+        "ret_lat": {
+          "type": "string",
+          "description": "latitude"
+        },
+        "ret_profile": {
+          "type": "string"
+        },
+        "ret_status_id": {
+          "type": "integer",
+          "description": "สถานะ 1 active 2 deactive"
+        },
+        "ret_confirm": {
+          "type": "string",
+          "description": "ยืนยัน T or F"
+        },
+        "user_id": {
+          "type": "integer",
+          "description": "รหัสผู้ใช้งาน"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-01-01 20:00:00",
+          "description": "วัน,เวลาที่สร้าง"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-01-01 20:00:00",
+          "description": "วัน,เวลาที่แก้ไข"
+        },
+        "created_by": {
+          "type": "integer",
+          "description": "ผู้สร้าง"
+        },
+        "updated_by": {
+          "type": "integer",
+          "description": "ผู้แก้ไข"
+        }
+      },
+      "required": ["ret_code", "ret_title", "ret_name", "user_id", "created_at", "updated_at", "created_by", "updated_by"]
+    },
+    "Schedule": {
+      "title": "Schedule",
+      "type": "object",
+      "properties": {
+        "schedule_id": {
+          "type": "integer"
+        },
+        "plant_code": {
+          "type": "string",
+          "description": "รหัสโรงงาน sys1 or sys2"
+        },
+        "schedule_date": {
+          "type": "string",
+          "format": "date",
+          "example": "2020-01-01",
+          "description": "วันที่"
+        },
+        "begin_time": {
+          "type": "string",
+          "format": "time",
+          "example": "20:00:00"
+        },
+        "end_time": {
+          "type": "string",
+          "format": "time",
+          "example": "20:00:00"
+        },
+        "loader_number": {
+          "type": "integer",
+          "description": "จำนวนช่องลงเศษเหล็ก"
+        },
+        "created_by": {
+          "type": "integer",
+          "description": "ผู้สร้าง"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-01-01 20:00:00",
+          "description": "วัน,เวลาที่สร้าง"
+        },
+        "updated_by": {
+          "type": "integer",
+          "description": "ผู้แก้ไข"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-01-01 20:00:00",
+          "description": "วัน,เวลาที่แก้ไข"
+        }
+      },
+      "required": ["plant_code", "schedule_date", "begin_time", "end_time", "loader_number", "created_by", "created_at", "updated_by", "updated_at"],
+      "description": ""
+    },
+    "ScheduleWeek": {
+      "title": "ScheduleWeek",
+      "type": "object",
+      "properties": {
+        "schedule_wk_id": {
+          "type": "integer"
+        },
+        "day_wk": {
+          "type": "number",
+          "description": "วัน"
+        },
+        "plant_code": {
+          "type": "string",
+          "description": "รหัสโรงงาน"
+        },
+        "begin_time": {
+          "type": "string",
+          "format": "time",
+          "example": "20:00:00",
+          "description": "เวลาเริ่มงาน"
+        },
+        "end_time": {
+          "type": "string",
+          "format": "time",
+          "example": "20:00:00",
+          "description": "เวลาสิ้นสุดงาน"
+        },
+        "loader_number": {
+          "type": "number",
+          "description": "จำนวนช่องลงเศษเหล็ก"
+        },
+        "schedule_status_id": {
+          "type": "integer",
+          "description": "สถานะ 1=Active/2=Deactive"
+        },
+        "created_by": {
+          "type": "integer",
+          "description": "ผู้สร้าง"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-01-01 20:00:00",
+          "description": "วัน,เวลาที่สร้าง"
+        },
+        "updated_by": {
+          "type": "integer",
+          "description": "ผู้แก้ไข"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-01-01 20:00:00",
+          "description": "วัน,เวลาที่แก้ไข"
+        }
+      },
+      "required": [
+        "day_wk",
+        "plant_code",
+        "begin_time",
+        "end_time",
+        "loader_number",
+        "schedule_status_id",
+        "created_by",
+        "created_at",
+        "updated_by",
+        "updated_at"
+      ]
+    },
+    "Setting": {
+      "title": "Setting",
+      "type": "object",
+      "description": "ตั้งค่า",
+      "properties": {
+        "setting_id": {
+          "type": "integer"
+        },
+        "ret_location_check_km": {
+          "type": "integer",
+          "description": "ระยะตรวจสอบการทำรายการร้านค้าย่อย"
+        },
+        "upload_location": {
+          "type": "integer",
+          "description": "เปิดการ upload location 1=Active/2=Deactive"
+        },
+        "upload_location_min": {
+          "type": "integer",
+          "description": "ความถี่ในการส่ง Location data"
+        },
+        "shipment_confirm": {
+          "type": "integer",
+          "description": "เปิดการแจ้งเตือนยืนยันการจัดส่ง 1=Active/2=Deactive"
+        },
+        "shipment_confirm_km": {
+          "type": "integer",
+          "description": "ระยะทางการยืนยันการจัดส่ง km."
+        },
+        "bulk_location_check": {
+          "type": "integer",
+          "description": "ตรวจสอบ Locataion เศษเหล็กเหมากอง 1=Active/2=Deactive"
+        },
+        "driver_blacklist_allow": {
+          "type": "integer",
+          "description": "อนุญาตพนักงานรถยนต์ Black list ลงทะเบียนใช้งานได้ 1=Active/2=Deactive"
+        },
+        "car_blacklist_allow": {
+          "type": "integer",
+          "description": "อนุญาตรถยนต์ Black list สามารถใช้งานได้ 1=Active/2=Deactive"
+        },
+        "car_approve_req": {
+          "type": "integer",
+          "description": "Approve เอกสารรถยนต์ ก่อนใช้งานระบบ 1=Active/2=Deactive"
+        },
+        "driver_approve_req": {
+          "type": "integer",
+          "description": "Approve เอกสารพนักงานขับรถยนต์ ก่อนใช้งานระบบ  1=Active/2=Deactive"
+        },
+        "advance_day": {
+          "type": "integer",
+          "description": "จองคิวล่วงหน้า(วัน)"
+        },
+        "advance_time": {
+          "type": "string",
+          "format": "time",
+          "example": "20:00:00",
+          "description": "เวลาปิดก่อนวันเดินทาง"
+        },
+        "map_api_key": {
+          "type": "string",
+          "description": "Map API Key"
+        },
+        "map_api_key_update": {
+          "type": "string",
+          "description": "Map API Key วันที่ปรับปรุง"
+        },
+        "created_by": {
+          "type": "integer",
+          "description": "ผู้สร้าง"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-01-01 20:00:00",
+          "description": "วัน,เวลาที่สร้าง"
+        },
+        "updated_by": {
+          "type": "integer",
+          "description": "ผู้แก้ไข"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-01-01 20:00:00",
+          "description": "วัน,เวลาที่แก้ไข"
+        }
+      },
+      "required": ["created_by", "created_at", "updated_by", "updated_at"]
+    },
+    "Test": {
+      "description": "",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "firstName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "lastName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "email": {
+          "type": "string",
+          "minLength": 1
+        },
+        "dateOfBirth": {
+          "type": "string",
+          "minLength": 1
+        },
+        "emailVerified": {
+          "type": "boolean"
+        },
+        "createDate": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": ["id", "firstName", "lastName", "email", "dateOfBirth", "emailVerified", "createDate"],
+      "x-examples": {
+        "example-1": {
+          "id": 0,
+          "firstName": "string",
+          "lastName": "string",
+          "email": "string",
+          "dateOfBirth": "string",
+          "emailVerified": true,
+          "createDate": "string"
+        }
+      }
+    },
+    "ShipmentStatus": {
+      "description": "",
+      "type": "object",
+      "properties": {
+        "shipment_status_id": {
+          "type": "integer",
+          "description": "รหัสสถานะการส่ง"
+        },
+        "shipment_status_des": {
+          "type": "string",
+          "description": "สถานะการส่ง"
+        },
+        "shipment_status_color": {
+          "type": "string"
+        }
+      },
+      "required": ["shipment_status_des", "shipment_status_color"]
+    },
+    "TrdConfirm": {
+      "description": "",
+      "type": "object",
+      "properties": {
+        "trd_confirm_id": {
+          "type": "integer"
+        },
+        "trd_id": {
+          "type": "integer",
+          "description": "รหัสผู้ขายเศษเหล็ก"
+        },
+        "ret_id": {
+          "type": "integer",
+          "description": "รหัสร้านค้า"
+        },
+        "confirm_status": {
+          "type": "string",
+          "description": "ยืนยัน Y or N"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-01-01 20:00:00",
+          "description": "วันที่สร้าง"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-01-01 20:00:00",
+          "description": "วันที่แก้ไข"
+        },
+        "created_by": {
+          "type": "integer",
+          "description": "ผู้บันทึก"
+        },
+        "updated_by": {
+          "type": "integer",
+          "description": "ผู้แก้ไข"
+        }
+      },
+      "required": ["trd_id", "ret_id", "confirm_status", "created_at", "updated_at", "created_by", "updated_by"]
+    },
+    "Truck": {
+      "description": "",
+      "type": "object",
+      "properties": {
+        "truck_id": {
+          "type": "integer"
+        },
+        "truck_no": {
+          "type": "string",
+          "minLength": 1,
+          "description": "ทะเบียนรถยนต์"
+        },
+        "truck_province": {
+          "type": "string",
+          "minLength": 1,
+          "description": "รหัสจังหวัด"
+        },
+        "head_flag": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Y=ทะเบียนหัว  N=ทะเบียนหาง"
+        },
+        "truck_type_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "ประเภทรถยนต์"
+        },
+        "blacklist_status": {
+          "type": "string",
+          "description": "Y=black list  N=Active"
+        },
+        "owner_type": {
+          "type": "integer",
+          "description": "ประเภทรถ 1=รถร้านค้า 2 = รถรับจ้าง"
+        },
+        "ret_id": {
+          "type": "integer",
+          "description": "รหัสร้านค้าย่อย"
+        },
+        "chassis_num": {
+          "type": "string",
+          "minLength": 1,
+          "description": "หมายเลขตัวถัง"
+        },
+        "truck_pic1_base_url": {
+          "type": "string",
+          "description": "ภาพด้านหน้า"
+        },
+        "truck_pic1_path": {
+          "type": "string"
+        },
+        "truck_pic2_base_url": {
+          "type": "string",
+          "description": "ภาพด้านข้าง"
+        },
+        "truck_pic2_path": {
+          "type": "string"
+        },
+        "truck_pic3_base_url": {
+          "type": "string",
+          "description": "ภาพด้านขวา"
+        },
+        "truck_pic3_path": {
+          "type": "string"
+        },
+        "truck_pic4_base_url": {
+          "type": "string",
+          "description": "ภาพด้านซ้าย"
+        },
+        "truck_pic4_path": {
+          "type": "string"
+        },
+        "book_pic_base_url": {
+          "type": "string",
+          "description": "ภาพคู่มือทะเบียนรถ"
+        },
+        "book_pic_path": {
+          "type": "string"
+        },
+        "confirm_status": {
+          "type": "string",
+          "description": "ยืนยัน Y or N"
+        },
+        "truck_confirm": {
+          "type": "string",
+          "minLength": 1,
+          "description": "ยืนยัน T or F"
+        },
+        "truck_status_id": {
+          "type": "integer",
+          "description": "สถานะ 1 active 2 deactive"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-01-01 20:00:00",
+          "description": "วัน,เวลาที่สร้าง"
+        },
+        "updated_at": {
+          "type": "string",
+          "description": "วัน,เวลาที่แก้ไข"
+        },
+        "created_by": {
+          "type": "string",
+          "description": "ผู้สร้าง"
+        },
+        "updated_by": {
+          "type": "string",
+          "description": "ผู้แก้ไข"
+        }
+      },
+      "required": [
+        "truck_id",
+        "truck_no",
+        "truck_province",
+        "head_flag",
+        "truck_type_id",
+        "blacklist_status",
+        "owner_type",
+        "chassis_num",
+        "truck_pic1_base_url",
+        "truck_pic1_path",
+        "truck_pic2_base_url",
+        "truck_pic2_path",
+        "truck_pic3_base_url",
+        "truck_pic3_path",
+        "truck_pic4_base_url",
+        "truck_pic4_path",
+        "book_pic_base_url",
+        "book_pic_path",
+        "confirm_status",
+        "truck_confirm",
+        "truck_status_id",
+        "created_at",
+        "updated_at",
+        "created_by",
+        "updated_by"
+      ]
+    },
+    "TruckType": {
+      "description": "",
+      "type": "object",
+      "x-examples": {
+        "example-1": {
+          "truck_type_ids": "1",
+          "truck_type": "1",
+          "truck_name": "ประเภทรถทดสอบ",
+          "trailer": "F",
+          "stdtime_loding": "30",
+          "base_low_wgt": "",
+          "max_diff_wgt": "",
+          "tolerance": "",
+          "tol_trans": ""
+        }
+      },
+      "properties": {
+        "truck_type_id": {
+          "type": "integer"
+        },
+        "truck_type": {
+          "type": "string",
+          "description": "ประเภทรถยนต์"
+        },
+        "truck_name": {
+          "type": "string",
+          "description": "ชื่อประเภทรถยนต์"
+        },
+        "trailer": {
+          "type": "string",
+          "description": "มีพ่วงท้าย T=มีพ่วงท้าย F=ไม่มีพ่วงท้าย"
+        },
+        "stdtime_loding": {
+          "type": "integer",
+          "description": "เวลา loading (นาที)"
+        },
+        "base_low_wgt": {
+          "type": "number",
+          "format": "float"
+        },
+        "max_diff_wgt": {
+          "type": "number",
+          "format": "float"
+        },
+        "tolerance": {
+          "type": "integer"
+        },
+        "tol_trans": {
+          "type": "integer"
+        }
+      },
+      "required": ["truck_type", "truck_name", "trailer", "stdtime_loding", "base_low_wgt", "max_diff_wgt", "tolerance", "tol_trans"]
+    },
+    "CancelReason": {
+      "title": "CancelReason",
+      "type": "object",
+      "properties": {
+        "cancel_reason_id": {
+          "type": "integer",
+          "description": "รหัสการยกเลิกรายการ"
+        },
+        "cancel_reason": {
+          "type": "string",
+          "description": "การยกเลิกรายการ"
+        }
+      },
+      "required": ["cancel_reason"]
+    },
+    "ChangeReason": {
+      "title": "ChangeReason",
+      "type": "object",
+      "properties": {
+        "change_reason_id": {
+          "type": "integer",
+          "description": "รหัสการเปลี่ยนแปลง"
+        },
+        "change_reason": {
+          "type": "string",
+          "description": "การเปลี่ยนแปลง"
+        }
+      },
+      "required": ["change_reason"]
+    },
+    "TrdRetailList": {
+      "title": "TrdRetailList",
+      "type": "object",
+      "properties": {
+        "ret_code": {
+          "type": "string",
+          "description": "รหัสร้านค้าย่อย"
+        },
+        "ret_name": {
+          "type": "string",
+          "description": "ชื่อร้านค้า"
+        },
+        "con_p": {
+          "type": "string",
+          "description": "ชื่อผู้ติดต่อ"
+        },
+        "con_tel": {
+          "type": "string",
+          "description": "เบอร์โทรศัพท์"
+        },
+        "confirm_status": {
+          "type": "string",
+          "description": "ยืนยัน"
+        },
+        "status_desc": {
+          "type": "string",
+          "description": "สถานะ"
+        }
+      },
+      "description": "รายชื่อร้านค้า",
+      "x-tags": ["Trd"]
+    },
+    "TrdShippingList": {
+      "title": "TrdShippingList",
+      "type": "object",
+      "description": "กำลังจัดส่ง",
+      "x-tags": ["Trd"],
+      "properties": {
+        "doc_num": {
+          "type": "string",
+          "description": "เลขที่เอกสาร"
+        },
+        "ret_code": {
+          "type": "string",
+          "description": "รหัสร้านค้าย่อย"
+        },
+        "ret_name": {
+          "type": "string",
+          "description": "ชื่อร้านค้าย่อย"
+        },
+        "ship_date": {
+          "type": "string",
+          "description": "วันที่"
+        },
+        "ship_time": {
+          "type": "string",
+          "description": "เวลา: ship_time_begin + ship_time_end"
+        },
+        "truck_name": {
+          "type": "string",
+          "description": "ประเภทรถยนต์"
+        },
+        "com_grade_code": {
+          "type": "string",
+          "description": "เกรด"
+        },
+        "plant_code": {
+          "type": "string",
+          "description": "สถานที่จัดส่ง"
+        },
+        "shipment_status_des": {
+          "type": "string",
+          "description": "สถานะ"
+        }
+      }
+    },
+    "UserType": {
+      "title": "UserType",
+      "type": "object",
+      "description": "ประเภทผู้ใช้งาน",
+      "properties": {
+        "user_type_id": {
+          "type": "integer"
+        },
+        "type_name": {
+          "type": "string",
+          "description": "ประเภทผู้ใช้งาน"
+        }
+      },
+      "required": ["type_name"]
+    },
+    "Profile": {
+      "title": "Profile",
+      "type": "object",
+      "description": "ข้อมูลผู้ใช้งาน",
+      "properties": {
+        "user_id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "public_email": {
+          "type": "string",
+          "format": "email"
+        },
+        "gravatar_email": {
+          "type": "string",
+          "format": "email"
+        },
+        "gravatar_id": {
+          "type": "integer"
+        },
+        "location": {
+          "type": "string"
+        },
+        "website": {
+          "type": "string",
+          "format": "uri"
+        },
+        "bio": {
+          "type": "string"
+        },
+        "timezone": {
+          "type": "string"
+        }
+      },
+      "required": ["user_id", "name"]
+    },
+    "SocialAccount": {
+      "title": "SocialAccount",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "user_id": {
+          "type": "integer"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "client_id": {
+          "type": "string"
+        },
+        "data": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "integer"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "username": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "provider", "client_id"]
+    },
+    "OauthToken": {
+      "title": "OauthToken",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "access_token": {
+          "type": "string"
+        },
+        "access_token_expires_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "client_id": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "integer"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "refresh_token": {
+          "type": "string"
+        },
+        "refresh_token_expires_at": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "access_token", "access_token_expires_at", "client_id", "user_id", "refresh_token", "refresh_token_expires_at"]
+    },
+    "OauthClient": {
+      "description": "",
+      "type": "object",
+      "x-examples": {
+        "example-1": {
+          "id": "2",
+          "client_id": "7d84db19095e98257088f2c9bff3389b29eaf37a",
+          "client_secret": "1aded25495d39c967f96924b5ee8be828246526c",
+          "redirect_uri": "http://127.0.0.1/yii2-advanced3/frontend/web/index.php?r=site%2Fauth&authclient=doh",
+          "grant_types": "client_credentials,authorization_code,password,implicit,urn:ietf:params:oauth:grant-type:jwt-bearer",
+          "user_id": "5073",
+          "scopes": "",
+          "name": "doc.anamai.moph.go.th",
+          "app_domain": "http://127.0.0.1/yii2-advanced3/frontend/web/index.php",
+          "contact_email": "ultrayoke_ru@hotmail.com",
+          "app_icon": "",
+          "app_icon_baseurl": "",
+          "is_public": "",
+          "created_at": "1487650510",
+          "updated_at": "1487660668"
+        }
+      },
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "client_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "client_secret": {
+          "type": "string",
+          "minLength": 1
+        },
+        "redirect_uri": {
+          "type": "string",
+          "minLength": 1
+        },
+        "grant_types": {
+          "type": "string",
+          "minLength": 1
+        },
+        "user_id": {
+          "type": "integer"
+        },
+        "scopes": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "app_domain": {
+          "type": "string",
+          "minLength": 1
+        },
+        "contact_email": {
+          "type": "string",
+          "minLength": 1
+        },
+        "app_icon": {
+          "type": "string"
+        },
+        "app_icon_baseurl": {
+          "type": "string"
+        },
+        "is_public": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "integer"
+        },
+        "updated_at": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "client_id",
+        "client_secret",
+        "redirect_uri",
+        "grant_types",
+        "user_id",
+        "scopes",
+        "name",
+        "app_domain",
+        "contact_email",
+        "app_icon",
+        "app_icon_baseurl",
+        "is_public",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    "OauthAuthorization": {
+      "description": "",
+      "type": "object",
+      "x-examples": {
+        "example-1": {
+          "id": "313",
+          "authorization_code": "3da7319000b0d540089ae1c12c60a7dd7922c57c",
+          "expires_at": "15/12/2020 15:56:03",
+          "redirect_uri": "http://localhost:8080/auth/callback",
+          "client_id": "88e12158d495c99c9ba7e3ced2d5506c77965550",
+          "user_id": "2",
+          "scope": "profile"
+        }
+      },
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "authorization_code": {
+          "type": "string"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "redirect_uri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "client_id": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "integer"
+        },
+        "scope": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "authorization_code", "expires_at", "redirect_uri", "client_id", "user_id", "scope"]
+    },
+    "FileStorageItem": {
+      "description": "",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "base_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "path": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "size": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "upload_ip": {
+          "type": "string",
+          "format": "ipv4"
+        },
+        "ref_table": {
+          "type": "string"
+        },
+        "ref_id": {
+          "type": "integer"
+        },
+        "ref_attribute": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "integer"
+        }
+      },
+      "required": ["id", "base_url", "path", "type", "size", "name", "upload_ip", "ref_table", "ref_id", "ref_attribute", "created_at"],
+      "x-examples": {
+        "example-1": {
+          "id": "3",
+          "base_url": "http://yii2-queue-udon.local/source",
+          "path": "\\1\\kpZmwB-T_gi1cko3j4WyTAJgtJVEnqnJ.jpg",
+          "type": "image/jpeg",
+          "size": "128697",
+          "name": "kpZmwB-T_gi1cko3j4WyTAJgtJVEnqnJ",
+          "upload_ip": "127.0.0.1",
+          "ref_table": "",
+          "ref_id": "",
+          "ref_attribute": "",
+          "created_at": "1572666787"
+        }
+      }
+    },
+    "AuthAssignment": {
+      "title": "AuthAssignment",
+      "type": "object",
+      "properties": {
+        "item_name": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "integer"
+        }
+      },
+      "required": ["item_name", "user_id", "created_at"]
+    },
+    "AuthItem": {
+      "title": "AuthItem",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "integer"
+        },
+        "description": {
+          "type": "string"
+        },
+        "rule_name": {
+          "type": "string"
+        },
+        "data": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "integer"
+        },
+        "updated_at": {
+          "type": "integer"
+        }
+      },
+      "required": ["name", "type"]
+    },
+    "AuthItemChild": {
+      "title": "AuthItemChild",
+      "type": "object",
+      "properties": {
+        "parent": {
+          "type": "string"
+        },
+        "child": {
+          "type": "string"
+        }
+      },
+      "required": ["parent", "child"]
+    },
+    "AuthRule": {
+      "title": "AuthRule",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "data": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "integer"
+        },
+        "updated_at": {
+          "type": "integer"
+        }
+      }
+    },
+    "Token": {
+      "title": "Token",
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "integer"
+        },
+        "code": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "integer"
+        },
+        "type": {
+          "type": "integer"
+        }
+      },
+      "required": ["user_id", "code"]
+    },
+    "RetailShippingList": {
+      "title": "RetailShippingList",
+      "type": "object",
+      "properties": {
+        "doc_num": {
+          "type": "string",
+          "description": "เลขที่เอกสาร"
+        },
+        "ret_code": {
+          "type": "string",
+          "description": "รหัสร้านค้าย่อย"
+        },
+        "ret_name": {
+          "type": "string",
+          "description": "ชื่อร้านค้าย่อย"
+        },
+        "ship_date": {
+          "type": "string",
+          "description": "วันที่"
+        },
+        "ship_time": {
+          "type": "string",
+          "description": "เวลา: ship_time_begin + ship_time_end"
+        },
+        "truck_name": {
+          "type": "string",
+          "description": "ประเภทรถยนต์"
+        },
+        "com_grade_code": {
+          "type": "string",
+          "description": "เกรด"
+        },
+        "plant_code": {
+          "type": "string",
+          "description": "สถานที่จัดส่ง"
+        },
+        "shipment_status_des": {
+          "type": "string",
+          "description": "สถานะ"
+        }
+      },
+      "description": "รายการกำลังจัดส่ง"
+    },
+    "RetailHistoryList": {
+      "title": "RetailHistoryList",
+      "type": "object",
+      "properties": {
+        "doc_num": {
+          "type": "string",
+          "description": "เลขที่เอกสาร"
+        },
+        "ret_code": {
+          "type": "string",
+          "description": "รหัสร้านค้าย่อย"
+        },
+        "ret_name": {
+          "type": "string",
+          "description": "ชื่อร้านค้าย่อย"
+        },
+        "ship_date": {
+          "type": "string",
+          "description": "วันที่"
+        },
+        "ship_time": {
+          "type": "string",
+          "description": "เวลา: ship_time_begin + ship_time_end"
+        },
+        "truck_name": {
+          "type": "string",
+          "description": "ประเภทรถยนต์"
+        },
+        "com_grade_code": {
+          "type": "string",
+          "description": "เกรด"
+        },
+        "plant_code": {
+          "type": "string",
+          "description": "สถานที่จัดส่ง"
+        },
+        "shipment_status_des": {
+          "type": "string",
+          "description": "สถานะ"
+        }
+      },
+      "description": "รายการประวัติใบนำส่ง"
+    },
+    "PLShippingList": {
+      "title": "ShippingList",
+      "type": "object",
+      "properties": {
+        "doc_num": {
+          "type": "string",
+          "description": "เลขที่เอกสาร"
+        },
+        "ret_code": {
+          "type": "string",
+          "description": "รหัสร้านค้าย่อย"
+        },
+        "ret_name": {
+          "type": "string",
+          "description": "ชื่อร้านค้าย่อย"
+        },
+        "ship_date": {
+          "type": "string",
+          "description": "วันที่"
+        },
+        "ship_time": {
+          "type": "string",
+          "description": "เวลา: ship_time_begin + ship_time_end"
+        },
+        "truck_name": {
+          "type": "string",
+          "description": "ประเภทรถยนต์"
+        },
+        "com_grade_code": {
+          "type": "string",
+          "description": "เกรด"
+        },
+        "plant_code": {
+          "type": "string",
+          "description": "สถานที่จัดส่ง"
+        },
+        "shipment_status_des": {
+          "type": "string",
+          "description": "สถานะ"
+        },
+        "doc_type": {
+          "type": "integer",
+          "description": "ประเภทการจัดส่ง 1=ส่งปกติ/2=Walk in"
+        },
+        "truck_no": {
+          "type": "string",
+          "description": "ทะเบียนรถยนต์"
+        },
+        "con_tel": {
+          "type": "string",
+          "description": "เบอร์โทรศัพท์"
+        },
+        "ret_confirm": {
+          "type": "string",
+          "description": "สถานะการยืนยัน"
+        },
+        "checkin_time": {
+          "type": "string",
+          "description": "เวลาเช็คอิน"
+        }
+      },
+      "description": "รายการจัดส่ง"
+    },
+    "PLHistoryList": {
+      "title": "PLHistoryList",
+      "type": "object",
+      "properties": {
+        "doc_num": {
+          "type": "string",
+          "description": "เลขที่เอกสาร"
+        },
+        "ret_code": {
+          "type": "string",
+          "description": "รหัสร้านค้าย่อย"
+        },
+        "ret_name": {
+          "type": "string",
+          "description": "ชื่อร้านค้าย่อย"
+        },
+        "ship_date": {
+          "type": "string",
+          "description": "วันที่"
+        },
+        "ship_time": {
+          "type": "string",
+          "description": "เวลา: ship_time_begin + ship_time_end"
+        },
+        "truck_name": {
+          "type": "string",
+          "description": "ประเภทรถยนต์"
+        },
+        "com_grade_code": {
+          "type": "string",
+          "description": "เกรด"
+        },
+        "plant_code": {
+          "type": "string",
+          "description": "สถานที่จัดส่ง"
+        },
+        "shipment_status_des": {
+          "type": "string",
+          "description": "สถานะ"
+        },
+        "doc_type": {
+          "type": "integer",
+          "description": "ประเภทการจัดส่ง 1=ส่งปกติ/2=Walk in"
+        },
+        "truck_no": {
+          "type": "string",
+          "description": "ทะเบียนรถยนต์"
+        },
+        "con_tel": {
+          "type": "string",
+          "description": "เบอร์โทรศัพท์"
+        },
+        "ret_confirm": {
+          "type": "string",
+          "description": "สถานะการยืนยัน"
+        },
+        "checkin_time": {
+          "type": "string",
+          "description": "เวลาเช็คอิน"
+        }
+      },
+      "description": "ประวัติใบนำส่ง"
+    },
+    "RetailList": {
+      "title": "RetailList",
+      "type": "object",
+      "description": "รายชื่อร้านค้า",
+      "properties": {
+        "ret_id": {
+          "type": "string",
+          "description": "ไอดีร้านค้า"
+        },
+        "ret_code": {
+          "type": "string",
+          "description": "รหัสร้านค้า"
+        },
+        "ret_name": {
+          "type": "string",
+          "description": "ชื่อร้านค้า"
+        },
+        "con_p": {
+          "type": "string",
+          "description": "ชื่อผู้ติดต่อ"
+        },
+        "con_tel": {
+          "type": "string",
+          "description": "เบอร์โทรศัพท์"
+        },
+        "ret_confirm": {
+          "type": "string",
+          "description": "สถานะการยืนยัน"
+        },
+        "ret_status_id": {
+          "type": "string",
+          "description": "สถานะ"
+        }
+      }
+    },
+    "Test2": {
+      "description": "",
+      "type": "object",
+      "properties": {
+        "ret_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "222"
+        },
+        "ret_code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ret_title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ret_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "retail_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "con_p": {
+          "type": "string"
+        },
+        "con_tel": {
+          "type": "string"
+        },
+        "ret_confirm": {
+          "type": "string"
+        },
+        "ret_status_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "trd_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "user_id": {
+          "type": "string"
+        },
+        "trd_code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ret_status_des": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "ret_id",
+        "ret_code",
+        "ret_title",
+        "ret_name",
+        "retail_name",
+        "con_p",
+        "con_tel",
+        "ret_confirm",
+        "ret_status_id",
+        "trd_id",
+        "user_id",
+        "trd_code",
+        "ret_status_des"
+      ]
+    }
+  },
+  "responses": {
+    "404": {
+      "description": "Example response",
+      "content": {
+        "application/json": {
+          "schema": {
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "schema": {
+        "description": "",
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "statusCode": {
+            "type": "number"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": ["success", "statusCode", "message"]
+      },
+      "examples": {
+        "Not-found": {
+          "success": false,
+          "statusCode": 404,
+          "message": "Not found."
+        }
+      }
+    },
+    "รายชื่อร้านค้า": {
+      "description": "Example response",
+      "content": {
+        "application/json": {
+          "schema": {
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "schema": {
+        "$ref": "#/definitions/RetailList"
+      }
+    },
+    "Successfully": {
+      "description": "Example response",
+      "content": {
+        "application/json": {
+          "schema": {
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "schema": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Successfully."
+          }
+        }
+      },
+      "examples": {
+        "example-1": {
+          "message": "Successfully."
+        }
+      }
+    },
+    "Deleted": {
+      "description": "Example response",
+      "content": {
+        "application/json": {
+          "schema": {
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "schema": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Deleted."
+          }
+        }
+      },
+      "examples": {
+        "example-1": {
+          "message": "Deleted."
+        }
+      }
+    },
+    "กำลังจัดส่ง-Trd": {
+      "description": "Example response",
+      "content": {
+        "application/json": {
+          "schema": {
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "schema": {
+        "$ref": "#/definitions/TrdShippingList"
+      }
+    },
+    "เลือกร้านค้าย่อย-Trd": {
+      "description": "Example response",
+      "content": {
+        "application/json": {
+          "schema": {
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "schema": {
+        "$ref": "#/definitions/TrdRetailList"
+      }
+    },
+    "กำลังจัดส่ง-Retail": {
+      "description": "Example response",
+      "content": {
+        "application/json": {
+          "schema": {
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "schema": {
+        "$ref": "#/definitions/RetailShippingList"
+      }
+    },
+    "ประวัติใบนำส่ง-Retail": {
+      "description": "Example response",
+      "content": {
+        "application/json": {
+          "schema": {
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "schema": {
+        "$ref": "#/definitions/RetailHistoryList"
+      }
+    },
+    "รายการใบนำส่ง": {
+      "description": "Example response",
+      "content": {
+        "application/json": {
+          "schema": {
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "schema": {
+        "$ref": "#/definitions/PLShippingList"
+      }
+    },
+    "Login": {
+      "description": "Example response",
+      "content": {
+        "application/json": {
+          "schema": {
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "schema": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string"
+          },
+          "expires_in": {
+            "type": "integer"
+          },
+          "token_type": {
+            "type": "string",
+            "default": "Bearer"
+          }
+        }
+      },
+      "examples": {
+        "example-1": {
+          "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1c2VybmFtZSI6InNtYXJ0Y2FyZSIsIm5hbWUiOiJTbWFydCBDYXJlIn0sIm5hbWUiOiJTbWFydCBDYXJlIiwianRpIjoyLCJpYXQiOjE2MTI4NDU4NjcsIm5iZiI6MTYxMjg0NTg2NywiZXhwIjoxNjEyOTMyMjY3LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODMifQ.rlpEnL3_IPuasonMQKg1A4iTuD5J-8K5-syeSYSZP6Q",
+          "expires_in": 1612932267,
+          "token_type": "Bearer"
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "User",
+      "description": "ผู้ใช้งาน"
+    },
+    {
+      "name": "Trd",
+      "description": "ผู้ขายเศษเหล็ก"
+    },
+    {
+      "name": "Retail",
+      "description": "ร้านค้าย่อย"
+    },
+    {
+      "name": "Delivery",
+      "description": "การจัดส่ง"
+    },
+    {
+      "name": "PL",
+      "description": "ใบนำส่งเศษเหล็ก"
+    },
+    {
+      "name": "Queuing",
+      "description": "การเรียกคิว"
+    },
+    {
+      "name": "Driver",
+      "description": "พนักงานขับรถยนต์"
+    },
+    {
+      "name": "Truck",
+      "description": "รถยนต์"
+    }
+  ],
+  "parameters": {},
+  "basePath": "/api/v1",
+  "securityDefinitions": {
+    "JWT": {
+      "name": "Authorization",
+      "type": "apiKey",
+      "in": "header",
+      "description": "Bearer <token>"
+    }
+  }
+}
