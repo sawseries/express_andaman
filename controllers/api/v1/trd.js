@@ -1,11 +1,41 @@
-const { TbTrd, TbRet, TbTrdConfirm } = require('../../../models/mysql')
+
+const TbTrd = require('../../../models/mysql/trd');
+const { TbRet, TbTrdConfirm } = require('../../../models/mysql')
 
 /**
  * สร้างรายการ
  *
  * API Document http://{hostname}/api-docs/#/Trd/post-trd-create
  */
-exports.postCreate = async (req, res) => {
+
+
+exports.all = async (req, res) => {
+  try {
+      var trd = await TbTrd.find()
+      res.send(trd)
+    }catch (err){
+      res.error(err)
+    }
+};
+
+
+exports.updates = async (req, res) => {
+
+  const id = req.params.id
+
+    try{
+
+      let values = TbTrd.schemas().validateSync(req.body)
+      const response = await new TbTrd(values).save()
+
+      res.success({ message: 'update success'})
+    }catch(err){
+      res.error(err)
+    }
+};
+
+
+ exports.postCreate = async (req, res) => {
   try {
     // validate
     let values = TbTrd.schemas().validateSync(req.body)
@@ -15,7 +45,9 @@ exports.postCreate = async (req, res) => {
   } catch (err) {
     res.error(err)
   }
-}
+};
+
+
 
 /**
  * อัพเดทรายการ
@@ -28,18 +60,20 @@ exports.postCreate = async (req, res) => {
 exports.postUpdate = async (req, res) => {
   const id = req.params.id
   req.assert(id, 400, 'invalid id.')
-  try {
+  
+  try{
+  
     const trd = await TbTrd.findOneById(id)
     req.assert(trd, 404, `trd id '${id}' not found.`)
-    // validate
-    let values = TbTrd.schemas().validateSync(Object.assign(trd, req.body))
-    // save
+
+    let values = TbTrd.schemas().validateSync(req.body)
     const response = await new TbTrd(values).save()
     res.success({ message: 'Updated.', response: response })
+
   } catch (err) {
     res.error(err)
   }
-}
+};
 
 /**
  * ลบรายการ
@@ -61,7 +95,7 @@ exports.delete = async (req, res) => {
   } catch (err) {
     res.error(err)
   }
-}
+};
 
 /**
  * เพิ่มรายชื่อร้านค้าย่อย
@@ -74,7 +108,7 @@ exports.postAddRetail = async () => {
   } catch (err) {
     res.error(err)
   }
-}
+};
 
 /**
  * ยืนยันร้านค้า
@@ -112,7 +146,7 @@ exports.postConfirmRetail = async (req, res) => {
   } catch (err) {
     res.error(err)
   }
-}
+};
 
 /**
  * ลบรายการร้านค้า
@@ -136,7 +170,7 @@ exports.deleteRetail = async (req, res) => {
   } catch (err) {
     res.error(err)
   }
-}
+};
 
 /**
  * ข้อมูลผู้ขาย
@@ -146,17 +180,19 @@ exports.deleteRetail = async (req, res) => {
  * @param {Number} trd_id ไอดีผู้ขาย
  */
 exports.getProfile = async (req, res) => {
+
   const trdId = req.params.trd_id
   const userId = req.user.id
+  
   try {
     let profile = null
     if (trdId) {
-      profile = await TbTrd.findOneById(trdId)
+      profile = await tb_trd.findOneById(trdId)
     } else {
-      profile = await TbTrd.findOneByUserId(userId)
+      profile = await tb_trd.findOneByUserId(userId)
     }
     res.success(profile)
   } catch (err) {
     res.error(err)
   }
-}
+};

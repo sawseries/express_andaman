@@ -22,7 +22,11 @@ const graphqlSchema = require('./graphql/schemas')
 const graphqlResolver = require('./graphql/resolvers')
 const error = require('./middlewares/error')
 
+
 const app = express()
+app.use(bodyParser.json());
+app.use(cors());    
+app.use(cookieParser());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
@@ -31,6 +35,8 @@ app.set('view engine', 'ejs')
 if (devMode) {
   app.use(logger('dev'))
 }
+
+
 // app.use(express.json())
 // app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
@@ -107,6 +113,14 @@ app.get('/', (req, res) => res.success({ message: 'It works!' }))
 // auto load routes
 const appRoutes = autoRoutes(app, path.join(__dirname, 'routes'))
 app.appRoutes = appRoutes
+
+var trdRouter = require('./routes/api/v1/trd');
+var settingRouter = require('./routes/api/v1/setting');
+var companyRouter = require('./routes/api/v1/company');
+
+app.use('/trd/', trdRouter);
+app.use('/company/',companyRouter);
+app.use('/setting/',settingRouter);
 
 /**
  * GraphQL API

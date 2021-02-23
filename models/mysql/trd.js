@@ -1,4 +1,4 @@
-const db = require('../../core/db').mysql
+const db = require('../../core/db/index.js').mysql
 const yup = require('yup')
 const _ = require('lodash')
 const { TB_TRD } = require('./tables')
@@ -6,10 +6,22 @@ const transformDatetime = require('../../utils/transform-datetime')
 const dayjs = require('dayjs')
 dayjs.locale(process.env.LOCALE)
 
+const knex = require('knex')({
+  client: 'mysql',
+  connection: {
+    host : 'localhost',
+    user : 'root',
+    password : '',
+    database : 'sys-rest-api'
+  },
+  useNullAsDefault: true
+});
+
 /**
  * tb_trd
  */
-class Model {
+class tb_trd_model{
+
   constructor(attributes) {
     this.attributes = attributes
     this.db = db
@@ -106,21 +118,22 @@ class Model {
 
   save() {
     if (!this.attributes) throw new Error('attributes not set.')
+    
     let attributes = _.omit(this.attributes, ['trd_id'])
-
-    if (_.get(this.attributes, 'trd_id')) {
+    
+    if (_.get(this.attributes,'trd_id')) {
       // update
       return this.db(this.tableName)
         .where('trd_id', this.attributes.trd_id)
-        .update(_.omit(attributes, ['created_at']))
+        .update(this.attributes)
     } else {
       // create
-      return this.db(this.tableName).insert(attributes)
+      return this.db(this.tableName).insert(this.attributes)
     }
   }
 }
 
-Model.tableName = TB_TRD
-Model.db = db
+tb_trd_model.tableName = TB_TRD
+tb_trd_model.db = db
 
-module.exports = Model
+module.exports = tb_trd_model
