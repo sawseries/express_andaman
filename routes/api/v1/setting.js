@@ -7,9 +7,9 @@ const validate = require('../../../middlewares/validation')
 const validators = require('../../../validations/setting.validator')
 
 //รายการทั้งหมด
-router.get('/',authenticateJwt,controller.all)
+router.get('/',controller.all)
 //แก้ไขรายการ
-router.post('/update/:id',authenticateJwt,controller.postUpdate)
+router.post('/update/:id',controller.postUpdate)
 
 
 module.exports = router

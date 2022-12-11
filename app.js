@@ -1,5 +1,4 @@
 require('dotenv').config()
-
 const devMode = process.env.NODE_ENV === 'development'
 const express = require('express')
 const path = require('path')
@@ -8,6 +7,8 @@ const logger = require('morgan')
 const helmet = require('helmet')
 const compression = require('compression')
 const cors = require('cors')
+
+
 const corsMiddleware = require('./middlewares/cors')
 const RateLimit = require('express-rate-limit')
 const RedisStore = require('rate-limit-redis')
@@ -24,6 +25,9 @@ const error = require('./middlewares/error')
 
 
 const app = express()
+
+
+
 app.use(bodyParser.json());
 app.use(cors());    
 app.use(cookieParser());

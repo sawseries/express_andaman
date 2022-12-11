@@ -1,33 +1,27 @@
-const passport = require('passport')
-const passportJWT = require('passport-jwt')
-const ExtractJwt = passportJWT.ExtractJwt
-const JwtStrategy = passportJWT.Strategy
+
 const { User } = require('../../models/mysql')
+const JwtStrategy = require('passport-jwt').Strategy;
+const ExtractJwt = require('passport-jwt').ExtractJwt;
+const keys = require("../../core/auth/key")
 
-const jwtOptions = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.JWT_SECRET,
-  issuer: process.env.JWT_ISSUER,
-  jsonWebTokenOptions: {
-    algorithm: process.env.JWT_ALGORITHM,
-    notBefore: process.env.JWT_NOTBEFORE,
-    expiresIn: process.env.JWT_EXPIRESIN,
-    issuer: process.env.JWT_ISSUER,
-  },
-  passReqToCallback: true,
+const opts = {};
+
+opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.secretOrKey = keys.secretOrKey
+
+module.exports = passport => {
+    passport.use(
+        new JwtStrategy(opts, (jwt_payload, done) => {
+            User.findById(jwt_payload.id)
+            .then(user => {
+                if (user) {
+                    return done(null, user)
+                }
+                return done(null, false)
+            })
+            .catch(err => {
+                console.log(err)
+            });
+        })
+    )
 }
-
-/**
- * Sign in with JWT.
- */
-const jwtStrategyConfig = new JwtStrategy(jwtOptions, async (req, jwt_payload, done) => {
-  try {
-    const user = await User.findById(jwt_payload.jti)
-    req.assert(user, 401, 'Unauthorized.')
-    req.user = user
-    return done(null, user)
-  } catch (error) {
-    return done(error, false)
-  }
-})
-passport.use(jwtStrategyConfig)
